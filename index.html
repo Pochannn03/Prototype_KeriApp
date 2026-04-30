@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keri App - Full Thesis Prototype</title>
+    <title>KeriApp - Full Thesis Prototype</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
 <div id="app-frame">
+    <!-- OS STATUS BAR -->
     <div class="status-bar" id="status-bar" style="color: white;">
         <span>9:41</span>
         <div style="display: flex; gap: 6px; align-items: center;">
@@ -20,7 +21,10 @@
         </div>
     </div>
 
-    <!-- MODAL OVERLAY -->
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- GLOBAL MODAL OVERLAY (Diskarte) -->
     <div class="modal-overlay" id="diskarte-modal">
         <div class="modal-content">
             <div style="font-weight: 800; font-family: 'Manrope'; font-size: 18px; margin-bottom: 12px; color: var(--primary);">
@@ -32,14 +36,152 @@
             </p>
             <div style="display: flex; gap: 12px;">
                 <button class="btn-secondary" style="flex: 1; padding: 12px;" onclick="closeModal()">Dismiss</button>
-                <button class="btn-primary" style="flex: 1; padding: 12px;" onclick="closeModal()">Notify Home</button>
+                <button class="btn-primary" style="flex: 1; padding: 12px;" onclick="closeModal(); showToast('Home speaker notified.', 'success')">Notify Home</button>
             </div>
+        </div>
+    </div>
+
+    <!-- SECURITY OTP MODAL -->
+    <div class="modal-overlay" id="otp-modal">
+        <div class="modal-content" style="text-align: center;">
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px; font-family: 'Manrope';">Security Check</h3>
+            <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px; line-height: 1.4;">Enter the 4-digit code sent to your registered mobile number.</p>
+            
+            <div style="display: flex; gap: 12px; justify-content: center; margin-bottom: 24px;">
+                <input type="number" class="otp-input" maxlength="1">
+                <input type="number" class="otp-input" maxlength="1">
+                <input type="number" class="otp-input" maxlength="1">
+                <input type="number" class="otp-input" maxlength="1">
+            </div>
+            
+            <div style="display: flex; gap: 12px;">
+                <button class="btn-secondary" style="flex: 1; padding: 12px;" onclick="closeOtpModal()">Cancel</button>
+                <button class="btn-primary" style="flex: 1; padding: 12px;" id="btn-verify-otp" onclick="verifyOtp()">Verify</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARBON CELEBRATION MODAL -->
+    <div class="modal-overlay" id="carbon-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #D1FAE5; color: #10B981; display: flex; justify-content: center; align-items: center; font-size: 28px; margin: 0 auto 16px auto;">
+                <i class="fa-solid fa-leaf"></i>
+            </div>
+            <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; font-family: 'Manrope'; color: #065F46;">Great Job, Eco-Warrior!</h3>
+            <p style="font-size: 14px; color: var(--text-gray); margin-bottom: 24px; line-height: 1.5;">By choosing to carpool today, you just saved an estimated <strong>1.2 kg of CO2</strong> from entering the atmosphere!</p>
+            <button class="btn-primary" style="background: #10B981; color: white;" onclick="closeCarbonModal()">Awesome!</button>
+        </div>
+    </div>
+
+    <!-- Funding Source Sheet -->
+    <div class="sheet-overlay" id="overlay-funding" onclick="closeSheet('sheet-funding')"></div>
+    <div class="bottom-sheet" id="sheet-funding">
+        <div class="sheet-handle"></div>
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Select Funding Source</h2>
+        <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px;">Where should we pull the funds from?</p>
+        
+        <div class="funding-option" onclick="selectFunding('GCash')">
+            <i class="fa-solid fa-mobile-screen-button icon"></i>
+            <span>GCash E-Wallet</span>
+            <i class="fa-solid fa-chevron-right" style="color: var(--text-gray); margin-left: auto;"></i>
+        </div>
+        <div class="funding-option" onclick="selectFunding('Card')">
+            <i class="fa-solid fa-credit-card icon"></i>
+            <span>Credit / Debit Card</span>
+            <i class="fa-solid fa-chevron-right" style="color: var(--text-gray); margin-left: auto;"></i>
+        </div>
+        <div class="funding-option" onclick="selectFunding('Bank')">
+            <i class="fa-solid fa-building-columns icon"></i>
+            <span>Linked Bank Account</span>
+            <i class="fa-solid fa-chevron-right" style="color: var(--text-gray); margin-left: auto;"></i>
+        </div>
+    </div>
+
+    <!-- Top Up Sheet Overlay & Content -->
+    <div class="sheet-overlay" id="overlay-topup" onclick="closeSheet('sheet-topup')"></div>
+    <div class="bottom-sheet" id="sheet-topup">
+        <div class="sheet-handle"></div>
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Enter Amount</h2>
+        <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px;" id="funding-label">Funding from selected source.</p>
+        
+        <input type="number" class="input-field" placeholder="₱ 0.00" style="font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 16px; font-family: 'Manrope';">
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 32px;">
+            <button class="btn-secondary" style="padding: 12px; flex: 1;" onclick="document.querySelector('#sheet-topup .input-field').value = '100'">+₱100</button>
+            <button class="btn-secondary" style="padding: 12px; flex: 1;" onclick="document.querySelector('#sheet-topup .input-field').value = '500'">+₱500</button>
+            <button class="btn-secondary" style="padding: 12px; flex: 1;" onclick="document.querySelector('#sheet-topup .input-field').value = '1000'">+₱1000</button>
+        </div>
+        
+        <button class="btn-primary" id="btn-confirm-topup" onclick="processTopUp()">Confirm Top Up</button>
+    </div>
+
+    <!-- Transfer Sheet Overlay & Content -->
+    <div class="sheet-overlay" id="overlay-transfer" onclick="closeSheet('sheet-transfer')"></div>
+    <div class="bottom-sheet" id="sheet-transfer">
+        <div class="sheet-handle"></div>
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Transfer Funds</h2>
+        <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px;">Send money to another KeriApp user.</p>
+        
+        <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Recipient Number</label>
+        <input type="tel" class="input-field" placeholder="09XX XXX XXXX" style="margin-bottom: 16px;">
+        
+        <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Amount</label>
+        <input type="number" class="input-field amount-input" placeholder="₱ 0.00" style="margin-bottom: 32px; font-weight: 600; font-family: 'Manrope';">
+        
+        <button class="btn-primary" id="btn-confirm-transfer" onclick="processTransfer()">Send Money</button>
+    </div>
+
+    <!-- Post Ride Sheet Overlay and Content -->
+    <div class="sheet-overlay" id="overlay-postride" onclick="closeSheet('sheet-postride')"></div>
+    <div class="bottom-sheet" id="sheet-postride">
+        <div class="sheet-handle"></div>
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Share a Ride</h2>
+        <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px;">Share your route with the verified community.</p>
+
+        <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Destination</label>
+        <input type="text" class="input-field" placeholder="e.g. Makati CBD" style="margin-bottom: 24px;">
+
+        <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+            Available Seats 
+            <span id="seat-display" style="color: var(--primary); font-size: 18px; font-weight: 800; font-family: 'Manrope';">1</span>
+        </label>
+        <div style="margin-bottom: 32px; padding: 10px 0;">
+            <input type="range" min="1" max="6" value="1" step="1" id="seat-slider" class="seat-slider" oninput="updateSeatDisplay(this.value)">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-light-gray); margin-top: 8px; font-weight: 600; padding: 0 4px;">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+            </div>
+        </div>
+
+        <button class="btn-primary" id="btn-confirm-post" onclick="processPostRide()">Broadcast Ride</button>
+    </div>
+
+    <!-- Fullscreen Camera Overlay -->
+    <div class="camera-overlay" id="camera-overlay">
+        <div style="padding: 50px 24px 20px 24px; position: relative; z-index: 10;">
+            <div style="display: flex; justify-content: space-between; align-items: center; color: white;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; cursor: pointer;" onclick="closeCamera()">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+                <h2 style="font-size: 16px; font-weight: 600; color: white;">Scan QR to Pay</h2>
+                <div style="width: 40px;"></div>
+            </div>
+        </div>
+        
+        <div class="camera-viewfinder">
+            <div class="qr-target">
+                <div class="scan-line"></div>
+            </div>
+        </div>
+        
+        <div style="padding: 40px 24px; position: relative; z-index: 10; text-align: center;">
+            <p style="color: white; font-size: 14px; margin-bottom: 24px;">Align QR code within the frame to scan.</p>
+            <button class="btn-primary" onclick="simulateScan()" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);">Simulate Successful Scan</button>
         </div>
     </div>
 
     <!-- SPLASH / LOGIN SCREEN -->
     <div id="screen-splash" class="screen active">
-        <button class="sos-btn" onclick="alert('SOS ACTIVATED: Live location sent to emergency contacts.')"><i class="fa-solid fa-triangle-exclamation"></i> SOS</button>
+        <button class="sos-btn" onclick="showToast('SOS ACTIVATED: Live location sent to emergency contacts.', 'danger')"><i class="fa-solid fa-triangle-exclamation"></i> SOS</button>
         
         <div style="text-align: center; margin-bottom: 40px; margin-top: 60px;">
             <i class="fa-solid fa-layer-group" style="font-size: 64px; margin-bottom: 24px;"></i>
@@ -99,22 +241,51 @@
                 </div>
             </div>
             
-            <div class="card" style="margin: 0; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: white; padding: 20px; border: none; cursor: pointer;" onclick="alert('Broadcast sent: Mom is on her way. ETA 25 minutes.')">
+            <div class="card" style="margin: 0; display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: white; padding: 20px; border: none; cursor: pointer;" onclick="showToast('Broadcast sent. Mom is on her way.', 'primary')">
                 <i class="fa-solid fa-tower-broadcast" style="font-size: 24px; margin-bottom: 12px;"></i>
                 <div style="font-weight: 700; font-size: 14px; line-height: 1.3;">Broadcast<br>"I'm on my way"</div>
             </div>
         </div>
 
-        <div class="section-title">Chore & Task Sync</div>
-        <div class="card">
-            <label class="checkbox-container">
-                <input type="checkbox" checked>
-                <span style="text-decoration: line-through; color: var(--text-gray);">Lock back door</span>
-            </label>
-            <label class="checkbox-container" style="margin-bottom: 0;">
-                <input type="checkbox">
-                <span>Heat up dinner (Leo)</span>
-            </label>
+        <div class="section-title">Smart Appliances</div>
+        <div class="smart-grid">
+            <div class="smart-toggle active" onclick="toggleSmart(this)">
+                <div class="toggle-header">
+                    <div class="toggle-icon"><i class="fa-solid fa-fire-burner"></i></div>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div>
+                    <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">Smart Oven</div>
+                    <div style="font-size: 13px; color: var(--text-gray);" class="toggle-status">On</div>
+                </div>
+            </div>
+
+            <div class="smart-toggle" onclick="toggleSmart(this)">
+                <div class="toggle-header">
+                    <div class="toggle-icon" style="background: var(--bg-main); color: var(--text-light-gray);"><i class="fa-solid fa-snowflake"></i></div>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div>
+                    <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">Master Aircon</div>
+                    <div style="font-size: 13px; color: var(--text-gray);" class="toggle-status">Off</div>
+                </div>
+            </div>
+
+            <div class="smart-toggle active" onclick="toggleSmart(this)">
+                <div class="toggle-header">
+                    <div class="toggle-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div class="toggle-switch"></div>
+                </div>
+                <div>
+                    <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">Porch Lights</div>
+                    <div style="font-size: 13px; color: var(--text-gray);" class="toggle-status">On</div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: transparent; color: var(--text-gray); padding: 20px; border: 2px dashed var(--border-color); cursor: pointer; text-align: center;" onclick="showToast('Add appliance screen coming soon.', 'primary')">
+                <i class="fa-solid fa-plus" style="font-size: 24px; margin-bottom: 8px;"></i>
+                <div style="font-weight: 600; font-size: 14px;">Add Appliance</div>
+            </div>
         </div>
     </div>
 
@@ -124,20 +295,21 @@
         <p class="header-subtitle">Unified Transit & Budgeting</p>
 
         <div class="wallet-blue-card">
-            <div class="wallet-pill"><i class="fa-solid fa-check-circle"></i> Solo Parent 20% Auto-Discount</div>
-            <div style="font-size: 13px; opacity: 0.8; margin-bottom: 4px;">AVAILABLE BALANCE</div>
-            <div style="font-family: 'Manrope'; font-size: 36px; font-weight: 800; margin-bottom: 24px;">₱ 1,450.00</div>
+            <div class="wallet-pill" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.2); font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Solo Parent 20% Discount</div>
+            
+            <div style="font-size: 13px; opacity: 0.8; margin-bottom: 4px; margin-top: 16px;">AVAILABLE BALANCE</div>
+            <div style="font-family: 'Manrope'; font-size: 36px; font-weight: 800; margin-bottom: 24px;" id="wallet-balance-display">₱ 1,450.00</div>
             
             <div style="display: flex; gap: 12px;">
-                <button style="flex: 1; background: rgba(255,255,255,0.2); border: none; color: white; padding: 12px; border-radius: 12px; font-weight: 600; font-family: 'Inter'; cursor: pointer;">Top Up</button>
-                <button style="flex: 1; background: rgba(255,255,255,0.2); border: none; color: white; padding: 12px; border-radius: 12px; font-weight: 600; font-family: 'Inter'; cursor: pointer;">Transfer</button>
+                <button style="flex: 1; background: rgba(255,255,255,0.2); border: none; color: white; padding: 12px; border-radius: 12px; font-weight: 600; font-family: 'Inter'; cursor: pointer; transition: 0.2s;" onclick="openSheet('sheet-funding')">Top Up</button>
+                <button style="flex: 1; background: rgba(255,255,255,0.2); border: none; color: white; padding: 12px; border-radius: 12px; font-weight: 600; font-family: 'Inter'; cursor: pointer; transition: 0.2s;" onclick="openSheet('sheet-transfer')">Transfer</button>
             </div>
         </div>
 
         <div class="section-title">Scan to Pay</div>
         <div class="card qr-card">
             <div class="qr-placeholder"><i class="fa-solid fa-qrcode"></i></div>
-            <button class="btn-secondary">
+            <button class="btn-secondary" onclick="openCamera()">
                 <i class="fa-solid fa-camera"></i> Open Camera
             </button>
         </div>
@@ -148,8 +320,8 @@
                 <span>Weekly Transit Budget</span>
                 <span>₱800 / ₱1,000</span>
             </div>
-            <div class="budget-bar"><div class="budget-fill" style="width: 80%;"></div></div>
-            <p style="font-size: 12px; color: var(--warning); font-weight: 500;"><i class="fa-solid fa-circle-exclamation"></i> Alert: Approaching premium ride limit.</p>
+            <div class="budget-bar"><div class="budget-fill" data-target-width="80%"></div></div>
+            <p style="font-size: 12px; color: var(--warning); font-weight: 500;"><i class="fa-solid fa-circle-exclamation"></i> Alert Approaching premium ride limit.</p>
         </div>
     </div>
 
@@ -158,21 +330,56 @@
         <h1 class="header-title" style="margin-top: 10px;">KeriRide</h1>
         <p class="header-subtitle">Navigate safely and avoid dead time.</p>
 
+        <div class="section-title">Sustainability</div>
+        <div class="card" style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 50px; height: 50px; border-radius: 16px; background: #D1FAE5; color: #10B981; display: flex; justify-content: center; align-items: center; font-size: 24px;">
+                <i class="fa-solid fa-leaf"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-size: 13px; color: var(--text-gray); font-weight: 600;">CO2 Saved This Week</div>
+                <div style="font-size: 24px; font-weight: 800; color: #065F46; font-family: 'Manrope';">12.5 kg</div>
+            </div>
+            <div style="text-align: right; border-left: 1px solid var(--border-color); padding-left: 16px;">
+                <div style="font-size: 11px; color: var(--text-gray); margin-bottom: 2px;">This Month</div>
+                <div style="font-size: 15px; font-weight: 700; color: var(--text-dark);">45.2 kg</div>
+            </div>
+        </div>
+
         <div class="section-title">Live Crowd Density</div>
-        <div class="card">
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
-                    <span>MRT 3 - Ayala Stn</span> <span style="color: var(--danger)">Severe</span>
+        <div class="flip-card">
+            <div class="flip-card-inner" id="density-flip-card">
+                <div class="card flip-card-front" style="margin-bottom: 0; background-color: #FEF2F2; border: 1px solid #FECACA;">
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+                            <span>MRT 3 - Ayala Stn</span> <span style="color: var(--danger)">Severe</span>
+                        </div>
+                        <div class="density-bar"><div class="density-fill front-bar" data-target-width="85%" style="background: var(--danger);"></div></div>
+                    </div>
+                    <div style="margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+                            <span>BGC Bus Terminal</span> <span style="color: var(--warning)">Moderate</span>
+                        </div>
+                        <div class="density-bar"><div class="density-fill front-bar" data-target-width="50%" style="background: var(--warning);"></div></div>
+                    </div>
+                    <button class="btn-secondary" style="padding: 12px; font-size: 13px;" onclick="flipDensityCard()"><i class="fa-solid fa-code-branch"></i> Suggest Less Crowded Route</button>
                 </div>
-                <div class="density-bar"><div class="density-fill" style="width: 85%; background: var(--danger);"></div></div>
-            </div>
-            <div style="margin-bottom: 24px;">
-                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
-                    <span>BGC Bus Terminal</span> <span style="color: var(--warning)">Moderate</span>
+                
+                <div class="card flip-card-back" style="margin-bottom: 0; background-color: var(--primary-light); border: 1px solid #C7D2FE;">
+                    <div style="margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+                            <span>P2P Bus - McKinley</span> <span style="color: var(--alert-btn)">Light</span>
+                        </div>
+                        <div class="density-bar"><div class="density-fill back-bar" data-target-width="15%" style="background: var(--alert-btn);"></div></div>
+                    </div>
+                    <div style="margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+                            <span>Carousel - Ortigas</span> <span style="color: var(--alert-btn)">Light</span>
+                        </div>
+                        <div class="density-bar"><div class="density-fill back-bar" data-target-width="20%" style="background: var(--alert-btn);"></div></div>
+                    </div>
+                    <button class="btn-secondary" style="padding: 12px; font-size: 13px; margin-top: auto;" onclick="flipDensityCard()"><i class="fa-solid fa-arrow-rotate-left"></i> Back to Live Density</button>
                 </div>
-                <div class="density-bar"><div class="density-fill" style="width: 50%; background: var(--warning);"></div></div>
             </div>
-            <button class="btn-secondary" style="padding: 12px; font-size: 13px;"><i class="fa-solid fa-lightbulb"></i> Suggest Well-Lit Route</button>
         </div>
 
         <div class="card smart-toggle active" style="flex-direction: row; align-items: center; padding: 16px 20px;" onclick="toggleSmart(this)">
@@ -182,6 +389,8 @@
             </div>
             <div class="toggle-switch"></div>
         </div>
+
+        <div id="my-posted-rides-container"></div>
 
         <div class="section-title">Verified Carpool Network</div>
         <div class="card" style="padding: 12px;">
@@ -198,7 +407,7 @@
             </div>
             <div style="display: flex; gap: 8px; padding: 0 4px;">
                 <button class="btn-primary" id="book-ride-btn" onclick="simulateRide(this)" style="flex: 2; padding: 12px; border-radius: 12px; font-size: 13px;">Join Carpool</button>
-                <button class="btn-secondary" style="flex: 1; padding: 12px; border-radius: 12px;" onclick="alert('Trip Details Shared to Home & Contacts')"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                <button class="btn-secondary" style="flex: 1; padding: 12px; border-radius: 12px;" onclick="showToast('Shared to Verified user', 'success')"><i class="fa-solid fa-share-nodes"></i> Share</button>
             </div>
         </div>
     </div>
@@ -214,25 +423,55 @@
             <button class="btn-alert" onclick="openModal()">View Details <i class="fa-solid fa-arrow-right" style="margin-left: 4px;"></i></button>
         </div>
 
-        <div class="section-title">Daily Routine Tracker <a href="#" class="section-link">Sync</a></div>
-        <div class="card" style="padding: 0 20px;">
-            <div class="list-item">
-                <div style="display: flex; gap: 16px; align-items: center;">
-                    <div class="list-icon" style="background: #E0E7FF;"><i class="fa-solid fa-school"></i></div>
-                    <div>
-                        <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">Pick up Leo</div>
-                        <div style="font-size: 13px; color: var(--text-gray);">4:00 PM • Leaves in 2 hrs</div>
-                    </div>
+        <!-- NEW WEATHER CARD -->
+        <div class="weather-card">
+            <div class="weather-header">
+                <div><i class="fa-solid fa-location-arrow" style="margin-right: 6px;"></i> <strong>Parañaque</strong> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></div>
+                <i class="fa-solid fa-ellipsis"></i>
+            </div>
+            <div class="weather-main">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-cloud-sun" style="font-size: 48px; color: #FCD34D;"></i>
+                    <span style="font-size: 48px; font-weight: 300;">35°C</span>
+                </div>
+                <div style="font-size: 12px; line-height: 1.4; text-align: right; max-width: 140px;">
+                    <i class="fa-solid fa-temperature-arrow-up" style="color: #EF4444;"></i> Hot outside. Feels like temperature is 40°. <i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i>
                 </div>
             </div>
-            <div class="list-item">
-                <div style="display: flex; gap: 16px; align-items: center;">
-                    <div class="list-icon" style="background: #FEF3C7; color: var(--warning);"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                    <div>
-                        <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">Pay Electricity Bill</div>
-                        <div style="font-size: 13px; color: var(--text-gray);">Due Today</div>
-                    </div>
+            <div class="weather-hourly">
+                <div class="hourly-item">
+                    <span>2 PM</span>
+                    <i class="fa-solid fa-sun" style="color: #F59E0B; font-size: 18px;"></i>
+                    <span style="font-weight: 600; font-size: 15px;">36°</span>
+                    <span style="font-size: 10px; opacity: 0.9;"><i class="fa-solid fa-droplet"></i> 0%</span>
                 </div>
+                <div class="hourly-item">
+                    <span>3 PM</span>
+                    <i class="fa-solid fa-sun" style="color: #F59E0B; font-size: 18px;"></i>
+                    <span style="font-weight: 600; font-size: 15px;">36°</span>
+                    <span style="font-size: 10px; opacity: 0.9;"><i class="fa-solid fa-droplet"></i> 1%</span>
+                </div>
+                <div class="hourly-item">
+                    <span>4 PM</span>
+                    <i class="fa-solid fa-sun" style="color: #F59E0B; font-size: 18px;"></i>
+                    <span style="font-weight: 600; font-size: 15px;">35°</span>
+                    <span style="font-size: 10px; opacity: 0.9;"><i class="fa-solid fa-droplet"></i> 2%</span>
+                </div>
+                <div class="hourly-item">
+                    <span>5 PM</span>
+                    <i class="fa-solid fa-sun" style="color: #F59E0B; font-size: 18px;"></i>
+                    <span style="font-weight: 600; font-size: 15px;">34°</span>
+                    <span style="font-size: 10px; opacity: 0.9;"><i class="fa-solid fa-droplet"></i> 2%</span>
+                </div>
+                <div class="hourly-item">
+                    <span>6 PM</span>
+                    <i class="fa-solid fa-cloud-sun" style="color: #FCD34D; font-size: 18px;"></i>
+                    <span style="font-weight: 600; font-size: 15px;">33°</span>
+                    <span style="font-size: 10px; opacity: 0.9;"><i class="fa-solid fa-droplet"></i> 2%</span>
+                </div>
+            </div>
+            <div class="weather-footer">
+                <button class="btn-weather" onclick="showToast('Loading full forecast...', 'primary')">See full forecast</button>
             </div>
         </div>
 
@@ -265,7 +504,7 @@
                 <span>😫</span><span>😕</span><span>😐</span><span>🙂</span><span>🤩</span>
             </div>
             <input type="text" placeholder="Specific complaints? (e.g. Broken lights)" style="width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #D1D5DB; margin-bottom: 16px; font-size: 14px; font-family: 'Inter';">
-            <button class="btn-primary" onclick="alert('Feedback routed securely to LGU.')">Submit to LGU</button>
+            <button class="btn-primary" onclick="showToast('Feedback routed securely to LGU.', 'success')">Submit to LGU</button>
         </div>
     </div>
 
@@ -301,7 +540,8 @@
         <p style="text-align: center; font-size: 13px; color: var(--text-gray); margin-top: 16px; font-weight: 500;">Stay safe on the road. See you tomorrow.</p>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
+    <button class="fab-button" id="fab-post-ride" onclick="openSheet('sheet-postride')">Share a Ride</button>
+
     <div class="bottom-nav hidden" id="bottom-nav">
         <div class="nav-item active" onclick="switchTab('keriview')" id="nav-keriview">
             <i class="fa-solid fa-shield-halved"></i><span>KeriView</span>
@@ -317,7 +557,7 @@
         </div>
     </div>
     
-    <script src="/index.js"></script>
+    <script src="index.js"></script>
 </div>
 
 </body>

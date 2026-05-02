@@ -23,6 +23,11 @@
 
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="toast-container"></div>
+    
+    <!-- ANDROID NATIVE ALARM TOAST SIMULATION -->
+    <div id="android-alarm-toast" class="android-toast">
+        <i class="fa-solid fa-alarm-clock"></i> Alarm set for 45 mins from now
+    </div>
 
     <!-- GLOBAL MODAL OVERLAY (Diskarte) -->
     <div class="modal-overlay" id="diskarte-modal">
@@ -70,6 +75,110 @@
             <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; font-family: 'Manrope'; color: #065F46;">Great Job, Eco-Warrior!</h3>
             <p style="font-size: 14px; color: var(--text-gray); margin-bottom: 24px; line-height: 1.5;">By choosing to carpool today, you just saved an estimated <strong>1.2 kg of CO2</strong> from entering the atmosphere!</p>
             <button class="btn-primary" style="background: #10B981; color: white;" onclick="closeCarbonModal()">Awesome!</button>
+        </div>
+    </div>
+
+    <!-- LOCATION PERMISSION MODAL -->
+    <div class="modal-overlay" id="location-permission-modal">
+        <div class="modal-content" style="padding: 24px 20px;">
+            <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+                <i class="fa-solid fa-location-dot" style="font-size: 32px; color: var(--primary);"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; text-align: center;">Allow KeriApp to access this device's location?</h3>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-primary" style="background: var(--primary-light); color: var(--primary); font-weight: 600;" onclick="grantLocationPermission()">While using the app</button>
+                <button class="btn-primary" style="background: var(--primary-light); color: var(--primary); font-weight: 600;" onclick="grantLocationPermission()">Only this time</button>
+                <button class="btn-secondary" style="border: none; color: var(--text-gray); box-shadow: none;" onclick="closeLocationPermission()">Don't allow</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAP DESTINATION OVERLAY -->
+    <div class="camera-overlay" id="map-destination-overlay" style="background: var(--bg-main);">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=600&q=80'); background-size: cover; background-position: center; opacity: 0.6;"></div>
+        
+        <div style="position: absolute; top: 50px; left: 24px; right: 24px; z-index: 10;">
+            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 12px 16px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <i class="fa-solid fa-arrow-left" style="font-size: 18px; color: #111827; cursor: pointer;" onclick="closeMapDestination()"></i>
+                <input type="text" placeholder="Where to?" value="Ayala Station" style="border: none; outline: none; font-size: 16px; font-family: 'Inter'; font-weight: 600; width: 100%; color: #111827; background: transparent;">
+            </div>
+        </div>
+
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); z-index: 5; text-align: center;">
+            <div style="background: #111827; color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; margin-bottom: 8px; white-space: nowrap;">Ayala Station</div>
+            <i class="fa-solid fa-location-dot" style="font-size: 40px; color: var(--danger); filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3));"></i>
+        </div>
+
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; padding: 24px; background: var(--surface); border-radius: 24px 24px 0 0; z-index: 10; box-shadow: 0 -4px 20px rgba(0,0,0,0.05);">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">Set Destination</h3>
+            <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 20px;">We'll calculate the route from Boni Station.</p>
+            <button class="btn-primary" onclick="confirmDestination()">Confirm Ayala Station</button>
+        </div>
+    </div>
+
+    <!-- DISCOUNT SUCCESS MODAL -->
+    <div class="modal-overlay" id="discount-success-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #EEF2FF; color: #1A43BF; display: flex; justify-content: center; align-items: center; font-size: 28px; margin: 0 auto 16px auto;">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 12px; font-family: 'Manrope'; color: var(--text-dark);">Application Submitted</h3>
+            <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px; line-height: 1.5;">
+                Your application has been successfully submitted and is pending review. Please check your email and text messages for further notifications regarding your status.
+            </p>
+            <button class="btn-primary" style="width: 100%;" onclick="closeDiscountModal()">Got it</button>
+        </div>
+    </div>
+
+    <!-- CARPOOL VERIFY SUCCESS MODAL -->
+    <div class="modal-overlay" id="carpool-success-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #EEF2FF; color: #1A43BF; display: flex; justify-content: center; align-items: center; font-size: 28px; margin: 0 auto 16px auto;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 12px; font-family: 'Manrope'; color: var(--text-dark);">Verification Submitted</h3>
+            <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px; line-height: 1.5;">
+                Your ResiLink carpool verification is pending review. Please check your email and text messages for further notifications regarding your status.
+            </p>
+            <button class="btn-primary" style="width: 100%;" onclick="closeCarpoolModal()">Got it</button>
+        </div>
+    </div>
+
+    <!-- QR SCAN SUCCESS MODAL -->
+    <div class="modal-overlay" id="scan-success-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #ECFDF5; color: #10B981; display: flex; justify-content: center; align-items: center; font-size: 28px; margin: 0 auto 16px auto;">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 12px; font-family: 'Manrope'; color: var(--text-dark);">Payment Successful</h3>
+            <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 24px; line-height: 1.5;">
+                QR code scanned successfully! <strong>₱120.00</strong> was deducted from your balance for MRT-3 transit.
+            </p>
+            <button class="btn-primary" style="width: 100%;" onclick="closeScanModal()">Done</button>
+        </div>
+    </div>
+
+    <!-- SLEEP TIMER MODAL -->
+    <div class="modal-overlay" id="sleep-timer-modal">
+        <div class="modal-content" style="text-align: center;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #EEF2FF; color: #1A43BF; display: flex; justify-content: center; align-items: center; font-size: 28px; margin: 0 auto 16px auto;">
+                <i class="fa-solid fa-bed"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 12px; font-family: 'Manrope'; color: var(--text-dark);">Sleep Timer Set</h3>
+            <p style="font-size: 13px; color: var(--text-gray); margin-bottom: 16px; line-height: 1.5;">
+                Rest easy! An alarm is set up to wake you up <strong>5 minutes</strong> before your destination.
+            </p>
+            <div style="background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 24px; text-align: left;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px;">
+                    <i class="fa-solid fa-location-dot" style="color: var(--primary); width: 16px; text-align: center;"></i>
+                    <span style="color: var(--text-gray);">Current:</span> <strong>Boni Station</strong>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                    <i class="fa-solid fa-flag-checkered" style="color: var(--alert-btn); width: 16px; text-align: center;"></i>
+                    <span style="color: var(--text-gray);">Drop-off:</span> <strong>Ayala Station</strong>
+                </div>
+            </div>
+            <button class="btn-primary" style="width: 100%;" onclick="closeSleepTimerModal()">Sweet Dreams</button>
         </div>
     </div>
 
@@ -175,7 +284,6 @@
         
         <div style="padding: 40px 24px; position: relative; z-index: 10; text-align: center;">
             <p style="color: white; font-size: 14px; margin-bottom: 24px;">Align QR code within the frame to scan.</p>
-            <button class="btn-primary" onclick="simulateScan()" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);">Simulate Successful Scan</button>
         </div>
     </div>
 
@@ -185,7 +293,7 @@
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
 
-        <!-- Centered Logo Area (No "KeriApp" text) -->
+        <!-- Centered Logo Area -->
         <div style="text-align: center; margin-bottom: 32px; margin-top: 20px; position: relative; z-index: 2;">
             <img src="/assets/1.png" alt="Logo" style="width: 90px; height: auto; margin-bottom: 16px;">
             <p style="font-size: 15px; font-weight: 500; opacity: 0.7; line-height: 1.5; color: var(--text-dark);">
@@ -230,7 +338,8 @@
     <div id="screen-keriview" class="screen">
         <div class="top-bar-dash">
             <div class="dash-profile">
-                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="User Profile" class="avatar">
+                <!-- NOW CLICKABLE -->
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="User Profile" class="avatar" style="cursor: pointer;" onclick="switchTab('profile')">
                 <div>
                     <h2 style="font-size: 20px; font-weight: 700;">Rina</h2>
                     <p style="font-size: 13px; color: var(--text-gray);">Home Command</p>
@@ -319,7 +428,6 @@
         <p class="header-subtitle">Unified Transit & Budgeting</p>
 
         <div class="wallet-blue-card">
-            <div class="wallet-pill" style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.2); font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Solo Parent 20% Discount</div>
             
             <div style="font-size: 13px; opacity: 0.8; margin-bottom: 4px; margin-top: 16px;">AVAILABLE BALANCE</div>
             <div style="font-family: 'Manrope'; font-size: 36px; font-weight: 800; margin-bottom: 24px;" id="wallet-balance-display">₱ 1,450.00</div>
@@ -406,10 +514,10 @@
             </div>
         </div>
 
-        <div class="card smart-toggle active" style="flex-direction: row; align-items: center; padding: 16px 20px;" onclick="toggleSmart(this)">
+        <div class="card smart-toggle" style="flex-direction: row; align-items: center; padding: 16px 20px;" onclick="toggleSleepTimer(this)">
             <div style="flex: 1;">
                 <div style="font-weight: 700; font-size: 15px; margin-bottom: 2px;"><i class="fa-solid fa-bed" style="color: var(--primary); margin-right: 6px;"></i> Transit Sleep Timer</div>
-                <div style="font-size: 13px; color: var(--text-gray);" class="toggle-status">Wakes you 1km before stop</div>
+                <div style="font-size: 13px; color: var(--text-gray);" class="toggle-status">Off</div>
             </div>
             <div class="toggle-switch"></div>
         </div>
@@ -426,7 +534,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 4px; margin-bottom: 16px;">
                 <div>
                     <div style="font-weight: 600; font-size: 14px;">Makati to QC Route</div>
-                    <div style="font-size: 12px; color: var(--text-gray);">3 Seats Available</div>
+                    <div style="font-size: 12px; color: var(--text-gray);">3 Seat Available</div>
                 </div>
             </div>
             <div style="display: flex; gap: 8px; padding: 0 4px;">
@@ -447,7 +555,6 @@
             <button class="btn-alert" onclick="openModal()">View Details <i class="fa-solid fa-arrow-right" style="margin-left: 4px;"></i></button>
         </div>
 
-        <!-- NEW WEATHER CARD -->
         <div class="weather-card">
             <div class="weather-header">
                 <div><i class="fa-solid fa-location-arrow" style="margin-right: 6px;"></i> <strong>Parañaque</strong> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></div>
@@ -542,6 +649,29 @@
         </div>
 
         <div class="card" style="padding: 0 20px;">
+            <div class="list-item" style="cursor: pointer;" onclick="switchTab('profile')">
+                <div style="display: flex; gap: 16px; align-items: center;">
+                    <div class="list-icon" style="background: var(--primary-light); color: var(--primary);"><i class="fa-solid fa-user"></i></div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">My Profile</div>
+                        <div style="font-size: 13px; color: var(--text-gray);">Personal info & details</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color: var(--text-gray);"></i>
+            </div>
+
+            <div class="list-item">
+                <div>
+                    <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">Dark Mode</div>
+                    <div style="font-size: 13px; color: var(--text-gray);">Toggle app theme</div>
+                </div>
+                <div class="theme-toggle" onclick="toggleTheme(this)">
+                    <i class="fa-solid fa-sun icon-sun"></i>
+                    <i class="fa-solid fa-moon icon-moon"></i>
+                    <div class="theme-switch-ball"></div>
+                </div>
+            </div>
+
             <div class="list-item">
                 <div>
                     <div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">Offline Mode</div>
@@ -562,6 +692,152 @@
             <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>
         <p style="text-align: center; font-size: 13px; color: var(--text-gray); margin-top: 16px; font-weight: 500;">Stay safe on the road. See you tomorrow.</p>
+    </div>
+
+    <!-- PROFILE PAGE (Hidden Tab) -->
+    <div id="screen-profile" class="screen">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; margin-top: 10px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; cursor: pointer;" onclick="switchTab('keriview')">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </div>
+                <h1 class="header-title" style="margin: 0;">Profile</h1>
+            </div>
+            
+            <button class="btn-secondary" id="edit-toggle-btn" style="padding: 8px 16px; font-size: 13px; border-radius: 20px; width: auto;" onclick="toggleEditMode()">
+                <i class="fa-solid fa-pen"></i> Edit
+            </button>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 24px;">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" alt="User Profile" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--surface); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div style="margin-top: 12px; font-weight: 700; font-size: 20px;" id="profile-display-name">Rina T. Resilient</div>
+            <div style="font-size: 13px; color: var(--primary); font-weight: 600;">@rina_commutes</div>
+        </div>
+
+        <div class="card">
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">First Name</label>
+            <input type="text" class="input-field profile-input" value="Rina" readonly style="margin-bottom: 16px;">
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Middle Name</label>
+            <input type="text" class="input-field profile-input" value="T." readonly style="margin-bottom: 16px;">
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Last Name</label>
+            <input type="text" class="input-field profile-input" value="Resilient" readonly style="margin-bottom: 16px;">
+
+            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Age</label>
+                    <input type="number" class="input-field profile-input" value="32" readonly>
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Sex</label>
+                    <input type="text" class="input-field profile-input" value="Female" readonly>
+                </div>
+            </div>
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Username</label>
+            <input type="text" class="input-field profile-input" value="rina_commutes" readonly style="margin-bottom: 16px;">
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Mobile # <i class="fa-solid fa-lock" style="font-size: 10px; margin-left: 4px; opacity: 0.5;"></i></label>
+            <input type="tel" class="input-field profile-input locked" value="+63 912 345 6789" readonly style="margin-bottom: 16px; color: var(--text-gray);">
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Email Address <i class="fa-solid fa-lock" style="font-size: 10px; margin-left: 4px; opacity: 0.5;"></i></label>
+            <input type="email" class="input-field profile-input locked" value="hello@rina-resilient.com" readonly style="color: var(--text-gray);">
+        </div>
+        
+        <button class="btn-primary" id="save-profile-btn" style="display: none; margin-top: 20px;" onclick="saveProfile()">Save Changes</button>
+        
+        <button class="btn-secondary" style="margin-top: 16px; width: 100%;" onclick="switchTab('discount')">
+            <i class="fa-solid fa-ticket"></i> Apply for Transit Discount
+        </button>
+        <button class="btn-secondary" style="margin-top: 16px; width: 100%;" onclick="switchTab('carpool-verify')">
+            <i class="fa-solid fa-car"></i> Get Verified for ResiLink
+        </button>
+    </div>
+
+    <!-- DISCOUNT APPLICATION PAGE (Hidden Tab) -->
+    <div id="screen-discount" class="screen">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px; margin-top: 10px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; cursor: pointer;" onclick="switchTab('profile')">
+                <i class="fa-solid fa-arrow-left"></i>
+            </div>
+            <h1 class="header-title" style="margin: 0;">Discounts</h1>
+        </div>
+
+        <div class="card" style="background: var(--primary-light); border-color: #C7D2FE;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--primary);"><i class="fa-solid fa-circle-info"></i> Qualifications</h3>
+            <p style="font-size: 13px; color: var(--text-gray); line-height: 1.5;">
+                Valid for LRT-1, LRT-2, MRT-3, EDSA Carousel, and City Buses. Applicants must present a valid ID matching their selected category to receive the mandated 20% fare discount.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Application Form</h2>
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Discount Category</label>
+            <select class="input-field" style="margin-bottom: 20px;">
+                <option value="" disabled selected>Select Category</option>
+                <option value="pwd">PWD (Person with Disability)</option>
+                <option value="senior">Senior Citizen</option>
+                <option value="student">Student</option>
+                <option value="solo_parent">Solo Parent</option>
+            </select>
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Upload Valid ID</label>
+            <input type="file" id="id-upload-input" accept="image/*" style="display: none;" onchange="previewIdImage(event)">
+            <div id="id-drop-zone" onclick="document.getElementById('id-upload-input').click()" style="border: 2px dashed var(--border-color); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 24px; cursor: pointer; overflow: hidden; position: relative; min-height: 140px; display: flex; align-items: center; justify-content: center;">
+                <div id="id-upload-placeholder">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 32px; color: var(--text-light-gray); margin-bottom: 12px;"></i>
+                    <div style="font-size: 13px; font-weight: 600;">Tap to upload photo</div>
+                    <div style="font-size: 11px; color: var(--text-gray); margin-top: 4px;">JPG or PNG, max 5MB</div>
+                </div>
+                <img id="id-preview-img" style="display: none; max-width: 100%; max-height: 200px; border-radius: 8px; margin: 0 auto; object-fit: cover;">
+            </div>
+
+            <button class="btn-primary" onclick="submitDiscount()">Submit Application</button>
+        </div>
+    </div>
+
+    <!-- CARPOOL VERIFY PAGE (Hidden Tab) -->
+    <div id="screen-carpool-verify" class="screen">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px; margin-top: 10px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border-color); display: flex; justify-content: center; align-items: center; cursor: pointer;" onclick="switchTab('profile')">
+                <i class="fa-solid fa-arrow-left"></i>
+            </div>
+            <h1 class="header-title" style="margin: 0;">ResiLink Verify</h1>
+        </div>
+
+        <div class="card" style="background: var(--primary-light); border-color: #C7D2FE;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--primary);"><i class="fa-solid fa-shield-check"></i> Trust & Safety</h3>
+            <p style="font-size: 13px; color: var(--text-gray); line-height: 1.5;">
+                To join the verified carpool network, please submit a valid Government ID and a recent selfie. Drivers must also upload their Driver's License.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Verification Form</h2>
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Carpool Role</label>
+            <select class="input-field" style="margin-bottom: 20px;">
+                <option value="" disabled selected>Select Role</option>
+                <option value="passenger">Passenger Only</option>
+                <option value="driver">Driver & Passenger</option>
+            </select>
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Upload Valid ID / License</label>
+            <input type="file" id="carpool-upload-input" accept="image/*" style="display: none;" onchange="previewCarpoolImage(event)">
+            <div id="carpool-drop-zone" onclick="document.getElementById('carpool-upload-input').click()" style="border: 2px dashed var(--border-color); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 24px; cursor: pointer; overflow: hidden; position: relative; min-height: 140px; display: flex; align-items: center; justify-content: center;">
+                <div id="carpool-upload-placeholder">
+                    <i class="fa-solid fa-id-card" style="font-size: 32px; color: var(--text-light-gray); margin-bottom: 12px;"></i>
+                    <div style="font-size: 13px; font-weight: 600;">Tap to upload document</div>
+                    <div style="font-size: 11px; color: var(--text-gray); margin-top: 4px;">JPG or PNG, max 5MB</div>
+                </div>
+                <img id="carpool-preview-img" style="display: none; max-width: 100%; max-height: 200px; border-radius: 8px; margin: 0 auto; object-fit: cover;">
+            </div>
+
+            <button class="btn-primary" onclick="submitCarpoolVerify()">Submit for Verification</button>
+        </div>
     </div>
 
     <button class="fab-button" id="fab-post-ride" onclick="openSheet('sheet-postride')">Share a Ride</button>

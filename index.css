@@ -14,6 +14,20 @@
     --warning: #F59E0B;
 }
 
+/* --- DARK MODE VARIABLES --- */
+[data-theme="dark"] {
+    --primary: #3B82F6;
+    --primary-light: #1E3A8A;
+    --text-dark: #F9FAFB;
+    --text-gray: #9CA3AF;
+    --text-light-gray: #6B7280;
+    --bg-main: #111827;
+    --surface: #1F2937;
+    --border-color: #374151;
+    --alert-bg: #064E3B;
+    --alert-text: #34D399;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -32,6 +46,11 @@ body {
     color: var(--text-dark);
 }
 
+/* Smooth theme transitions */
+.screen, .card, .bottom-nav, .bottom-sheet, .modal-content, .input-field, #app-frame {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 h1,
 h2,
 h3,
@@ -40,6 +59,7 @@ h4 {
     letter-spacing: -0.02em;
 }
 
+/* --- DEVICE MOCKUP --- */
 #app-frame {
     width: 390px;
     height: 844px;
@@ -51,6 +71,7 @@ h4 {
     border: 8px solid #FFFFFF;
 }
 
+/* --- OS STATUS BAR --- */
 .status-bar {
     height: 44px;
     width: 100%;
@@ -67,6 +88,7 @@ h4 {
     transition: color 0.3s;
 }
 
+/* --- APP CONTAINER & NAVIGATION --- */
 .screen {
     position: absolute;
     top: 0;
@@ -78,7 +100,7 @@ h4 {
     overflow-x: hidden;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, background-color 0.3s ease;
     background-color: var(--bg-main);
 }
 
@@ -104,7 +126,7 @@ h4 {
     justify-content: space-around;
     align-items: flex-start;
     padding-top: 12px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .bottom-nav.hidden {
@@ -132,6 +154,7 @@ h4 {
     color: var(--primary);
 }
 
+/* --- TYPOGRAPHY & COMPONENTS --- */
 .header-title {
     font-size: 24px;
     font-weight: 700;
@@ -188,10 +211,11 @@ h4 {
     transition: 0.2s ease;
 }
 
+/* Updated for better shape visibility */
 .btn-secondary {
-    background-color: var(--bg-main);
+    background-color: var(--surface);
     color: var(--primary);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--primary);
     padding: 16px 24px;
     border-radius: 16px;
     font-family: 'Inter';
@@ -204,6 +228,7 @@ h4 {
     align-items: center;
     gap: 8px;
     transition: 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
 .btn-secondary:hover {
@@ -249,7 +274,7 @@ h4 {
     background: var(--bg-main);
     color: var(--text-dark);
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background-color 0.3s, color 0.3s;
 }
 
 .input-field:focus {
@@ -257,9 +282,35 @@ h4 {
     background: var(--surface);
 }
 
+select.input-field {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 48px;
+    cursor: pointer;
+}
+
+/* Profile inputs transition smoothly from text to inputs */
+.profile-input {
+    transition: all 0.3s ease;
+}
+
+.profile-input[readonly] {
+    background: transparent;
+    border-color: transparent;
+    padding: 0;
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 16px;
+}
+
 /* --- SPLASH SCREEN ENHANCEMENTS --- */
 #screen-splash {
-    background: #FFF7ED; /* Base light orange */
+    background: #FFF7ED; 
     color: var(--text-dark);
     display: flex;
     flex-direction: column;
@@ -270,7 +321,6 @@ h4 {
     overflow: hidden;
 }
 
-/* Abstract ambient blobs */
 .blob {
     position: absolute;
     filter: blur(60px);
@@ -280,7 +330,7 @@ h4 {
 .blob-1 {
     width: 250px;
     height: 250px;
-    background: #FFEDD5; /* Darker orange hue */
+    background: #FFEDD5; 
     top: -50px;
     left: -50px;
     border-radius: 50%;
@@ -288,13 +338,12 @@ h4 {
 .blob-2 {
     width: 300px;
     height: 300px;
-    background: #FFE4E6; /* Soft pinkish hue for contrast */
+    background: #FFE4E6; 
     bottom: -100px;
     right: -100px;
     border-radius: 50%;
 }
 
-/* Glassmorphism Card */
 .login-card {
     background: rgba(255, 255, 255, 0.65);
     backdrop-filter: blur(24px);
@@ -315,7 +364,7 @@ h4 {
     font-size: 14px;
     font-family: 'Inter', sans-serif;
     background: rgba(255, 255, 255, 0.9);
-    color: var(--text-dark);
+    color: #111827;
     outline: none;
     transition: all 0.2s ease;
 }
@@ -326,7 +375,6 @@ h4 {
     background: #FFFFFF;
 }
 
-/* Divider line with text in middle */
 .divider {
     display: flex;
     align-items: center;
@@ -347,7 +395,6 @@ h4 {
     padding: 0 12px;
 }
 
-/* Social Buttons */
 .btn-social {
     flex: 1;
     padding: 14px;
@@ -367,6 +414,7 @@ h4 {
     box-shadow: 0 6px 16px rgba(0,0,0,0.06);
 }
 
+/* --- MODALS & BOTTOM SHEETS --- */
 .sheet-overlay {
     position: absolute;
     top: 0;
@@ -405,13 +453,13 @@ h4 {
 }
 
 .modal-content {
-    background: white;
+    background: var(--surface);
     width: 85%;
     border-radius: 24px;
     padding: 24px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     transform: translateY(20px);
-    transition: 0.3s ease;
+    transition: 0.3s ease, background-color 0.3s ease;
 }
 
 .modal-overlay.active .modal-content {
@@ -456,7 +504,7 @@ h4 {
     padding: 24px;
     padding-bottom: 40px;
     transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
     z-index: 210;
     box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
 }
@@ -505,7 +553,7 @@ h4 {
     -webkit-appearance: none;
     width: 100%;
     height: 8px;
-    background: #E5E7EB;
+    background: var(--border-color);
     border-radius: 4px;
     outline: none;
 }
@@ -642,6 +690,7 @@ h4 {
     }
 }
 
+/* --- IN-APP TOAST NOTIFICATIONS --- */
 .toast-container {
     position: absolute;
     top: 50px;
@@ -703,6 +752,35 @@ h4 {
     background: var(--alert-btn);
 }
 
+/* --- ANDROID OS TOAST --- */
+.android-toast {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translate(-50%, -100px);
+    background: rgba(32, 33, 36, 0.95);
+    color: #F8F9FA;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+}
+
+.android-toast.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+/* --- UI ELEMENTS --- */
 .top-bar-dash {
     display: flex;
     justify-content: space-between;
@@ -813,14 +891,14 @@ h4 {
 .qr-placeholder {
     width: 150px;
     height: 150px;
-    background: #F3F4F6;
+    background: var(--border-color);
     margin: 0 auto 20px auto;
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 60px;
-    color: #D1D5DB;
+    color: var(--text-light-gray);
 }
 
 .flip-card {
@@ -876,7 +954,7 @@ h4 {
 .density-bar {
     height: 8px;
     border-radius: 4px;
-    background: #E5E7EB;
+    background: var(--border-color);
     margin-top: 8px;
     overflow: hidden;
 }
@@ -946,6 +1024,7 @@ h4 {
     flex-direction: column;
     gap: 16px;
     cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .toggle-header {
@@ -962,12 +1041,15 @@ h4 {
     align-items: center;
     justify-content: center;
     font-size: 18px;
+    background: var(--bg-main);
+    color: var(--text-light-gray);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .toggle-switch {
     width: 44px;
     height: 24px;
-    background: #E5E7EB;
+    background: var(--border-color);
     border-radius: 12px;
     position: relative;
     cursor: pointer;
@@ -1036,7 +1118,7 @@ h4 {
     bottom: 104px;
     left: 50%;
     transform: translateX(-50%);
-    background: #FFFFFF;
+    background: var(--surface);
     color: var(--primary);
     border: 1px solid var(--border-color);
     padding: 10px 24px;
@@ -1057,6 +1139,54 @@ h4 {
     pointer-events: auto;
 }
 
+/* --- THEME TOGGLE (DARK MODE) --- */
+.theme-toggle {
+    width: 60px;
+    height: 32px;
+    background: var(--border-color);
+    border-radius: 16px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+    transition: background-color 0.3s;
+}
+
+.theme-toggle.dark {
+    background: var(--primary);
+}
+
+.theme-switch-ball {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0.2, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.theme-toggle.dark .theme-switch-ball {
+    transform: translateX(28px);
+}
+
+.theme-toggle i {
+    font-size: 13px;
+    z-index: 1;
+}
+
+.icon-sun { color: #F59E0B; }
+.icon-moon { color: var(--text-light-gray); }
+
+.theme-toggle.dark .icon-sun { color: rgba(255,255,255,0.4); }
+.theme-toggle.dark .icon-moon { color: #F1F5F9; }
+
+
+/* --- WEATHER CARD --- */
 .weather-card {
     background: linear-gradient(135deg, #3B82F6, #1D4ED8);
     border-radius: 24px;

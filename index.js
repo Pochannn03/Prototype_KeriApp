@@ -1,5 +1,7 @@
 let currentBalance = 1450.00;
 let pendingTransferAmount = 0; 
+let isEditMode = false;
+let scanTimer; // Timer for the QR scan simulation
 
 function updateBalanceDisplay() {
     const formatted = currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -11,11 +13,15 @@ function switchTab(tabName) {
         screen.classList.remove('active');
     });
     
-    if(tabName !== 'settings') {
+    // Hide bottom nav if we're in settings, profile, discount, or carpool verify
+    if(tabName !== 'settings' && tabName !== 'profile' && tabName !== 'discount' && tabName !== 'carpool-verify') {
         document.querySelectorAll('.nav-item').forEach(nav => {
             nav.classList.remove('active');
         });
         document.getElementById('nav-' + tabName).classList.add('active');
+        document.getElementById('bottom-nav').classList.remove('hidden');
+    } else {
+        document.getElementById('bottom-nav').classList.add('hidden');
     }
 
     const targetScreen = document.getElementById('screen-' + tabName);
@@ -61,6 +67,69 @@ function logout() {
     document.getElementById('fab-post-ride').classList.remove('active');
 }
 
+// --- DARK MODE THEME TOGGLE ---
+function toggleTheme(element) {
+    element.classList.toggle('dark');
+    
+    if (element.classList.contains('dark')) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if(document.getElementById('screen-settings').classList.contains('active') || document.getElementById('screen-profile').classList.contains('active') || document.getElementById('screen-discount').classList.contains('active') || document.getElementById('screen-carpool-verify').classList.contains('active')) {
+             document.getElementById('status-bar').style.color = 'var(--text-dark)';
+        }
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+}
+
+// --- PROFILE EDIT TOGGLE ---
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const btn = document.getElementById('edit-toggle-btn');
+    const inputs = document.querySelectorAll('.profile-input');
+    const saveBtn = document.getElementById('save-profile-btn');
+
+    if (isEditMode) {
+        btn.innerHTML = '<i class="fa-solid fa-eye"></i> View';
+        inputs.forEach(input => {
+            if(!input.classList.contains('locked')) {
+                input.removeAttribute('readonly');
+            }
+        });
+        saveBtn.style.display = "block";
+        inputs[0].focus();
+    } else {
+        btn.innerHTML = '<i class="fa-solid fa-pen"></i> Edit';
+        inputs.forEach(input => input.setAttribute('readonly', true));
+        saveBtn.style.display = "none";
+    }
+}
+
+function saveProfile() {
+    toggleEditMode(); 
+    showToast("Profile updated successfully!", "success");
+}
+
+function submitDiscount() {
+    document.getElementById('discount-success-modal').classList.add('active');
+}
+
+function closeDiscountModal() {
+    document.getElementById('discount-success-modal').classList.remove('active');
+    switchTab('profile');
+}
+
+// --- TRANSIT ID IMAGE UPLOAD PREVIEW ---
+function previewIdImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const imgUrl = URL.createObjectURL(file);
+        document.getElementById('id-upload-placeholder').style.display = 'none';
+        const previewImg = document.getElementById('id-preview-img');
+        previewImg.src = imgUrl;
+        previewImg.style.display = 'block';
+    }
+}
+
 function toggleSmart(element) {
     element.classList.toggle('active');
     const statusText = element.querySelector('.toggle-status');
@@ -81,6 +150,46 @@ function toggleSmart(element) {
             icon.style.color = 'var(--text-light-gray)';
         }
     }
+}
+
+// --- TRANSIT SLEEP TIMER FLOW ---
+function openLocationPermission() {
+    document.getElementById('location-permission-modal').classList.add('active');
+}
+
+function closeLocationPermission() {
+    document.getElementById('location-permission-modal').classList.remove('active');
+}
+
+function grantLocationPermission() {
+    closeLocationPermission();
+    setTimeout(() => {
+        document.getElementById('map-destination-overlay').classList.add('active');
+    }, 300);
+}
+
+function closeMapDestination() {
+    document.getElementById('map-destination-overlay').classList.remove('active');
+}
+
+function confirmDestination() {
+    closeMapDestination();
+    setTimeout(() => {
+        document.getElementById('sleep-timer-modal').classList.add('active');
+    }, 300);
+}
+
+function closeSleepTimerModal() {
+    document.getElementById('sleep-timer-modal').classList.remove('active');
+    
+    // Simulate Android Toast Alarm Notification
+    setTimeout(() => {
+        const toast = document.getElementById('android-alarm-toast');
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3500);
+    }, 400);
 }
 
 function openModal() { document.getElementById('diskarte-modal').classList.add('active'); }
@@ -252,6 +361,11 @@ document.querySelectorAll('.otp-input').forEach((input, index, inputs) => {
 function openCamera() {
     document.getElementById('camera-overlay').classList.add('active');
     document.getElementById('status-bar').style.color = 'white';
+    
+    // Start 5-second simulation timer
+    scanTimer = setTimeout(() => {
+        executeScanPayment();
+    }, 5000);
 }
 
 function closeCamera() {
@@ -259,10 +373,12 @@ function closeCamera() {
     if(!document.getElementById('screen-splash').classList.contains('active')){
         document.getElementById('status-bar').style.color = 'var(--text-dark)';
     }
+    // Clear timer if user manually closes early
+    if (scanTimer) clearTimeout(scanTimer);
 }
 
-function simulateScan() {
-    closeCamera();
+function executeScanPayment() {
+    closeCamera(); 
     
     setTimeout(() => {
         const fare = 120.00;
@@ -270,11 +386,15 @@ function simulateScan() {
         if (currentBalance >= fare) {
             currentBalance -= fare;
             updateBalanceDisplay();
-            showToast(`Payment of ₱${fare.toFixed(2)} to MRT-3 successful`, 'success');
+            document.getElementById('scan-success-modal').classList.add('active');
         } else {
             showToast('Insufficient balance for this ride.', 'danger');
         }
-    }, 400);
+    }, 400); 
+}
+
+function closeScanModal() {
+    document.getElementById('scan-success-modal').classList.remove('active');
 }
 
 function simulateRide(btn) {
@@ -391,4 +511,25 @@ function toggleTask(checkbox) {
     } else {
         taskTextSpan.classList.remove('completed');
     }
+}
+
+// --- CARPOOL VERIFY IMAGE UPLOAD PREVIEW ---
+function previewCarpoolImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const imgUrl = URL.createObjectURL(file);
+        document.getElementById('carpool-upload-placeholder').style.display = 'none';
+        const previewImg = document.getElementById('carpool-preview-img');
+        previewImg.src = imgUrl;
+        previewImg.style.display = 'block';
+    }
+}
+
+function submitCarpoolVerify() {
+    document.getElementById('carpool-success-modal').classList.add('active');
+}
+
+function closeCarpoolModal() {
+    document.getElementById('carpool-success-modal').classList.remove('active');
+    switchTab('profile');
 }

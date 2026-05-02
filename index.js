@@ -53,7 +53,7 @@ function logout() {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-splash').classList.add('active');
     document.getElementById('bottom-nav').classList.add('hidden');
-    document.getElementById('status-bar').style.color = 'white';
+    document.getElementById('status-bar').style.color = 'var(--text-dark)';
     
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('nav-keriview').classList.add('active');
@@ -336,7 +336,7 @@ function processPostRide() {
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 4px; margin-bottom: 16px;">
                     <div>
                         <div style="font-weight: 600; font-size: 14px;">Current Loc to ${destination}</div>
-                        <div style="font-size: 12px; color: var(--text-gray);">${seats} Solo Parent(s) Available</div>
+                        <div style="font-size: 12px; color: var(--text-gray);">${seats} Seat Available</div>
                     </div>
                 </div>
                 <div style="display: flex; gap: 8px; padding: 0 4px;">

@@ -40,7 +40,6 @@ h4 {
     letter-spacing: -0.02em;
 }
 
-/* --- DEVICE MOCKUP --- */
 #app-frame {
     width: 390px;
     height: 844px;
@@ -52,7 +51,6 @@ h4 {
     border: 8px solid #FFFFFF;
 }
 
-/* --- OS STATUS BAR --- */
 .status-bar {
     height: 44px;
     width: 100%;
@@ -69,7 +67,6 @@ h4 {
     transition: color 0.3s;
 }
 
-/* --- APP CONTAINER & NAVIGATION --- */
 .screen {
     position: absolute;
     top: 0;
@@ -135,7 +132,6 @@ h4 {
     color: var(--primary);
 }
 
-/* --- TYPOGRAPHY & COMPONENTS --- */
 .header-title {
     font-size: 24px;
     font-weight: 700;
@@ -261,33 +257,116 @@ h4 {
     background: var(--surface);
 }
 
-/* --- SPLASH SCREEN --- */
+/* --- SPLASH SCREEN ENHANCEMENTS --- */
 #screen-splash {
-    background: var(--primary);
-    color: white;
+    background: #FFF7ED; /* Base light orange */
+    color: var(--text-dark);
     display: flex;
     flex-direction: column;
     justify-content: center;
     z-index: 100;
-    padding-bottom: 40px;
+    padding: 0 24px;
+    position: relative;
+    overflow: hidden;
 }
 
-.sos-btn {
+/* Abstract ambient blobs */
+.blob {
     position: absolute;
-    top: 60px;
-    right: 24px;
-    background: var(--danger);
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 13px;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-    cursor: pointer;
+    filter: blur(60px);
+    z-index: 1;
+    opacity: 0.6;
+}
+.blob-1 {
+    width: 250px;
+    height: 250px;
+    background: #FFEDD5; /* Darker orange hue */
+    top: -50px;
+    left: -50px;
+    border-radius: 50%;
+}
+.blob-2 {
+    width: 300px;
+    height: 300px;
+    background: #FFE4E6; /* Soft pinkish hue for contrast */
+    bottom: -100px;
+    right: -100px;
+    border-radius: 50%;
 }
 
-/* --- MODALS & BOTTOM SHEETS --- */
+/* Glassmorphism Card */
+.login-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 32px;
+    padding: 32px 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 2;
+}
+
+.login-input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.08);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-dark);
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.login-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+    background: #FFFFFF;
+}
+
+/* Divider line with text in middle */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--text-light-gray);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.divider span {
+    padding: 0 12px;
+}
+
+/* Social Buttons */
+.btn-social {
+    flex: 1;
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.btn-social:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
 .sheet-overlay {
     position: absolute;
     top: 0;
@@ -339,7 +418,6 @@ h4 {
     transform: translateY(0);
 }
 
-/* OTP Input Boxes */
 .otp-input {
     width: 50px;
     height: 60px;
@@ -368,7 +446,6 @@ h4 {
     box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-/* Bottom Sheet */
 .bottom-sheet {
     position: absolute;
     bottom: 0;
@@ -396,7 +473,6 @@ h4 {
     margin: 0 auto 20px auto;
 }
 
-/* Funding Options */
 .funding-option {
     display: flex;
     align-items: center;
@@ -425,7 +501,6 @@ h4 {
     text-align: center;
 }
 
-/* Custom Seat Slider */
 .seat-slider {
     -webkit-appearance: none;
     width: 100%;
@@ -461,7 +536,6 @@ h4 {
     border: none;
 }
 
-/* Camera Fullscreen Overlay */
 .camera-overlay {
     position: absolute;
     top: 0;
@@ -568,7 +642,6 @@ h4 {
     }
 }
 
-/* --- IN-APP TOAST NOTIFICATIONS --- */
 .toast-container {
     position: absolute;
     top: 50px;
@@ -630,7 +703,6 @@ h4 {
     background: var(--alert-btn);
 }
 
-/* --- UI ELEMENTS --- */
 .top-bar-dash {
     display: flex;
     justify-content: space-between;
@@ -751,7 +823,6 @@ h4 {
     color: #D1D5DB;
 }
 
-/* --- FLIP CARD LOGIC --- */
 .flip-card {
     perspective: 1000px;
     margin-bottom: 20px;
@@ -786,7 +857,6 @@ h4 {
     justify-content: center;
 }
 
-/* --- DYNAMIC BARS --- */
 .budget-bar {
     height: 12px;
     background: var(--primary-light);
@@ -987,7 +1057,6 @@ h4 {
     pointer-events: auto;
 }
 
-/* --- WEATHER CARD --- */
 .weather-card {
     background: linear-gradient(135deg, #3B82F6, #1D4ED8);
     border-radius: 24px;

@@ -12,7 +12,7 @@
 
 <div id="app-frame">
     <!-- OS STATUS BAR -->
-    <div class="status-bar" id="status-bar" style="color: white;">
+    <div class="status-bar" id="status-bar" style="color: var(--text-dark);">
         <span>9:41</span>
         <div style="display: flex; gap: 6px; align-items: center;">
             <i class="fa-solid fa-signal" style="font-size: 12px;"></i>
@@ -181,23 +181,47 @@
 
     <!-- SPLASH / LOGIN SCREEN -->
     <div id="screen-splash" class="screen active">
-        <button class="sos-btn" onclick="showToast('SOS ACTIVATED: Live location sent to emergency contacts.', 'danger')"><i class="fa-solid fa-triangle-exclamation"></i> SOS</button>
-        
-        <div style="text-align: center; margin-bottom: 40px; margin-top: 60px;">
-            <i class="fa-solid fa-layer-group" style="font-size: 64px; margin-bottom: 24px;"></i>
-            <h1 style="font-size: 36px; font-weight: 800; margin-bottom: 16px;">KeriApp</h1>
-            <p style="font-size: 16px; opacity: 0.9; line-height: 1.5;">Reclaim your time.<br>Manage your home.<br>Navigate the city.</p>
+        <!-- Ambient Background Elements -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+
+        <!-- Centered Logo Area (No "KeriApp" text) -->
+        <div style="text-align: center; margin-bottom: 32px; margin-top: 20px; position: relative; z-index: 2;">
+            <img src="/assets/1.png" alt="Logo" style="width: 90px; height: auto; margin-bottom: 16px;">
+            <p style="font-size: 15px; font-weight: 500; opacity: 0.7; line-height: 1.5; color: var(--text-dark);">
+                Reclaim your time.<br>Manage your home.<br>Navigate the city.
+            </p>
         </div>
 
-        <div style="background: white; padding: 24px; border-radius: 24px; color: var(--text-dark); margin-top: auto;">
-            <button class="btn-secondary" onclick="login()" style="margin-bottom: 16px; color: #111827;">
-                <i class="fa-brands fa-google" style="color: #DB4437; font-size: 18px;"></i> Sign in with Google
-            </button>
-            <button class="btn-primary" onclick="login()" style="margin-bottom: 24px; background: #000;">
-                <i class="fa-brands fa-apple" style="font-size: 18px;"></i> Sign in with Apple
-            </button>
-            <div style="text-align: center; font-size: 13px; color: var(--text-gray); font-weight: 600;">
-                <i class="fa-solid fa-id-card" style="color: var(--primary);"></i> Solo Parent ID Verified
+        <!-- Modern Glassmorphism Login Card -->
+        <div class="login-card">
+            <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 24px; color: var(--text-dark); font-family: 'Manrope'; text-align: center;">Welcome Back</h2>
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block;">Email Address</label>
+            <input type="email" class="login-input" placeholder="hello@example.com">
+
+            <label style="font-size: 12px; font-weight: 600; color: var(--text-gray); margin-bottom: 8px; display: block; margin-top: 16px;">Password</label>
+            <input type="password" class="login-input" placeholder="••••••••">
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px; margin-bottom: 24px;">
+                <a href="#" style="font-size: 12px; color: var(--primary); font-weight: 600; text-decoration: none;">Forgot password?</a>
+            </div>
+
+            <!-- Triggers your existing login() javascript -->
+            <button class="btn-primary" onclick="login()" style="width: 100%; margin-bottom: 24px; padding: 16px; font-size: 16px; box-shadow: 0 8px 20px rgba(26, 67, 191, 0.25);">Sign In</button>
+
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+
+            <!-- Social Logins -->
+            <div style="display: flex; gap: 16px; margin-top: 24px;">
+                <button class="btn-social" onclick="login()">
+                    <i class="fa-brands fa-google" style="color: #DB4437; font-size: 20px;"></i>
+                </button>
+                <button class="btn-social" onclick="login()" style="background: #000; color: white; border: none;">
+                    <i class="fa-brands fa-apple" style="font-size: 20px;"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -402,7 +426,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 4px; margin-bottom: 16px;">
                 <div>
                     <div style="font-weight: 600; font-size: 14px;">Makati to QC Route</div>
-                    <div style="font-size: 12px; color: var(--text-gray);">3 Solo Parents Available</div>
+                    <div style="font-size: 12px; color: var(--text-gray);">3 Seats Available</div>
                 </div>
             </div>
             <div style="display: flex; gap: 8px; padding: 0 4px;">

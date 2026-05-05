@@ -13,8 +13,8 @@ function switchTab(tabName) {
         screen.classList.remove('active');
     });
     
-    // Hide bottom nav if we're in settings, profile, discount, or carpool verify
-    if(tabName !== 'settings' && tabName !== 'profile' && tabName !== 'discount' && tabName !== 'carpool-verify') {
+    // Hide bottom nav if we're in settings, profile, discount, carpool verify, or admin
+    if(tabName !== 'settings' && tabName !== 'profile' && tabName !== 'discount' && tabName !== 'carpool-verify' && tabName !== 'admin') {
         document.querySelectorAll('.nav-item').forEach(nav => {
             nav.classList.remove('active');
         });
@@ -49,17 +49,26 @@ function switchTab(tabName) {
 }
 
 function login() {
+    const emailInput = document.getElementById('login-email').value;
     document.getElementById('screen-splash').classList.remove('active');
-    switchTab('keriview'); 
-    document.getElementById('bottom-nav').classList.remove('hidden');
-    document.getElementById('status-bar').style.color = 'var(--text-dark)';
+    
+    if (emailInput === 'Admin_01') {
+        switchTab('admin');
+        document.getElementById('status-bar').style.color = 'var(--text-dark)';
+    } else {
+        switchTab('keriview'); 
+        document.getElementById('status-bar').style.color = 'var(--text-dark)';
+    }
 }
 
 function logout() {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-splash').classList.add('active');
     document.getElementById('bottom-nav').classList.add('hidden');
-    document.getElementById('status-bar').style.color = 'var(--text-dark)';
+    document.getElementById('status-bar').style.color = 'white'; // Keep white for splash
+    
+    // Reset login input
+    document.getElementById('login-email').value = '';
     
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('nav-keriview').classList.add('active');
@@ -73,7 +82,7 @@ function toggleTheme(element) {
     
     if (element.classList.contains('dark')) {
         document.documentElement.setAttribute('data-theme', 'dark');
-        if(document.getElementById('screen-settings').classList.contains('active') || document.getElementById('screen-profile').classList.contains('active') || document.getElementById('screen-discount').classList.contains('active') || document.getElementById('screen-carpool-verify').classList.contains('active')) {
+        if(document.getElementById('screen-settings').classList.contains('active') || document.getElementById('screen-profile').classList.contains('active') || document.getElementById('screen-discount').classList.contains('active') || document.getElementById('screen-carpool-verify').classList.contains('active') || document.getElementById('screen-admin').classList.contains('active')) {
              document.getElementById('status-bar').style.color = 'var(--text-dark)';
         }
     } else {
@@ -197,6 +206,10 @@ function closeModal() { document.getElementById('diskarte-modal').classList.remo
 
 function openCarbonModal() { document.getElementById('carbon-modal').classList.add('active'); }
 function closeCarbonModal() { document.getElementById('carbon-modal').classList.remove('active'); }
+
+function openWeatherModal() { document.getElementById('weather-ai-modal').classList.add('active'); }
+function closeWeatherModal() { document.getElementById('weather-ai-modal').classList.remove('active'); }
+
 
 function flipDensityCard() {
     const cardInner = document.getElementById('density-flip-card');
